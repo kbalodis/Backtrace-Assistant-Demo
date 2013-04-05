@@ -64,7 +64,7 @@
        	</property>
         <property name="hibernateProperties">
             <props>
-            	<prop key="hibernate.hbm2ddl.auto">create</prop>
+            	<prop key="hibernate.hbm2ddl.auto">update</prop>
                 <prop key="hibernate.dialect">${jdbc.dialect}</prop>
                 <prop key="hibernate.show_sql">true</prop>
             </props>
@@ -75,6 +75,7 @@
     
     <bean id="backtraceDao" class="com.krisjanis.balodis.dao.BacktraceDaoImpl"/>
 	<bean id="backtraceService" class="com.krisjanis.balodis.service.BacktraceServiceImpl"/>
+    <bean id="uniqueValidator" class="com.krisjanis.balodis.model.validators.UniqueKeyValidator"/>
     
     <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
         <property name="sessionFactory" ref="sessionFactory" />

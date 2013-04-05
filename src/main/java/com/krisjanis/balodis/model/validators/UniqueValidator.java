@@ -1,45 +1,48 @@
 package com.krisjanis.balodis.model.validators;
 
+import java.io.Serializable;
 import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.FlushModeType;
-import javax.persistence.PersistenceContext;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-
-import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+ 
+import org.hibernate.EntityMode;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
+import org.hibernate.engine.*;
+import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.metadata.ClassMetadata;
 
-import com.krisjanis.balodis.service.BacktraceService;
-
-
-
-public class UniqueValidator implements ConstraintValidator<UniqueField, String> {
-	
-    private BacktraceService backtraceService;
-
-    private Class<?> entityClass;
-    private String uniqueField;
-    
-    @SuppressWarnings("unchecked")
-	public void initialize(UniqueField unique) {
-        this.entityClass = (Class<Object>)unique.entity();
-        this.uniqueField = unique.property();
+ 
+public class UniqueValidator extends SessionAwareConstraintValidator<Object>
+        implements ConstraintValidator<Unique, Object> {
+ 
+    private String[] fields;
+ 
+    public void initialize(Unique annotation) {
+        this.fields = annotation.properties();
     }
-
-    public boolean isValid(String value, ConstraintValidatorContext cvContext) {
-    	
-    	boolean result = backtraceService.strObjParm(value, this.entityClass, this.uniqueField);
-    	return result;
-    	
+ 
+    public boolean isValidInSession(Object value, ConstraintValidatorContext context) {
+        if ( value == null ) {
+            return true;
+        }
+        return countRows( value ) == 0;
     }
-
+ 
+    private int countRows(Object value) {
+        ClassMetadata meta = getSessionFactory().getClassMetadata( value.getClass() );
+        String idName = meta.getIdentifierPropertyName();
+        Serializable id = meta.getIdentifier( value, ( SessionImplementor ) getTmpSession() );
+ 
+        DetachedCriteria criteria = DetachedCriteria.forClass( value.getClass() );
+        for ( String field : fields ) {
+            criteria.add( Restrictions.eq( field, meta.getPropertyValue( value, field ) ) );
+        }
+        criteria.add( Restrictions.ne( idName, id ) ).setProjection( Projections.rowCount() );
+ 
+        List results = criteria.getExecutableCriteria( getTmpSession() ).list();
+        Number count = ( Number ) results.iterator().next();
+        return count.intValue();
+    }
 }
-
-

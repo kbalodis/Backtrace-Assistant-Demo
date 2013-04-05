@@ -34,5 +34,5 @@ public interface BacktraceService {
 	
 	public List<Object> listObject(Class<?> c);
 	
-	public Boolean strObjParm(String str, Class <?> c, String column);
+	public Boolean duplicateCheck(String str, Class <?> c, String column);
 } 

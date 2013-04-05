@@ -77,7 +77,7 @@ public class BacktraceDaoImpl implements BacktraceDao {
 		return list;
 	}
 	
-	public Boolean strObjParm(String str, Class <?> c, String column) {
+	public Boolean duplicateCheck(String str, Class <?> c, String column) {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(c);
 		criteria.add(Restrictions.eq(column, str));
 		return criteria.list().isEmpty();

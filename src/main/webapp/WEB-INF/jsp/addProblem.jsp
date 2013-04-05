@@ -9,6 +9,9 @@
 	    <link href="<c:url value="/resources/bootstrap/css/bootstrap-responsive.css"/>" rel="stylesheet" type="text/css" />
 	   	<link href="<c:url value="/resources/bootstrap/datepicker/css/datepicker.css"/>" rel="stylesheet" type="text/css" />
 		<link href="<c:url value="/resources/bootstrap/datepicker/less/datepicker.less"/>" rel="stylesheet" type="text/less" />
+		<script src="<c:url value="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"/>"></script>
+		<script>window.jQuery || document.write('<script src="<c:url value="/resources/jQuery/jquery-1.9.1.js"/>"><\/script>')</script>
+		<script src="<c:url value="/resources/bootstrap/js/bootstrap.js"/>"></script>
 	</head>
 	<body>
 		<div class="navbar navbar-fixed-top"> 
@@ -18,12 +21,22 @@
 						<li class="active">
 							<a class="brand" href="index.html">Home</a>
 						</li>
-						<li><a href="listBacktraces.html">List BACKTRACES</a></li>
-						<li><a href="addBacktraceForm.html">Add BACKTRACE</a></li>
-						<li><a href="listProblems.html">List PROBLEMS</a></li>
-						<li><a href="addProblemForm.html">Add PROBLEM</a></li>
-						<li><a href="listVersions.html">List VERSIONS</a></li>
-						<li><a href="addVersionForm.html">Add VERSION</a></li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">LIST <b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li><a href="listBacktraces.html">BACKTRACES</a></li>
+			              		<li><a href="listProblems.html">PROBLEMS</a></li>
+			            		<li><a href="listVersions.html">Software VERSIONS</a></li>
+			            	</ul>
+			          	</li>
+			          	<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">ADD <b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li><a href="addBacktraceForm.html">BACKTRACE</a></li>
+								<li><a href="addProblemForm.html">PROBLEM</a></li>
+								<li><a href="addVersionForm.html">Software VERSION</a></li>
+			            	</ul>
+			          	</li>	
 					</ul>
 				</div>
 			</div>
@@ -43,6 +56,9 @@
 				    <div class="controls">
 				    	<form:input type="text" class="input-xlarge" path="problem"/>
 				    	<form:errors class="alert alert-info" path="problem" />
+				    	<c:if test="${!empty messageDuplicate}">
+							<span class="alert alert-info">${messageDuplicate}</span>
+						</c:if> 
 				    	<p class="help-block">Add the name of the problem!</p>
 				    </div>
 				</div>   
@@ -74,8 +90,6 @@
 				</div>
 			</fieldset>
 		</form:form>	
-		<script src="<c:url value="/resources/jQuery/jquery-1.9.1.js" />" type="text/javascript" charset="UTF-8"></script>
-		<script src="<c:url value="/resources/bootstrap/js/bootstrap.js"/> " type="text/javascript" charset="UTF-8"></script>
 		<script src="<c:url value="/resources/bootstrap/datepicker/js/bootstrap-datepicker.js"/> " type="text/javascript" charset="UTF-8"></script>
 		<script type="text/javascript">
 			var nowTemp = new Date();

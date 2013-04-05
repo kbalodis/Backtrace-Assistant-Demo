@@ -1,7 +1,7 @@
 package com.krisjanis.balodis.controller;
 
 import java.util.Map; 
-import java.util.Date;
+//import java.util.Date;
 //import java.util.HashMap;
 
 import javax.validation.Valid;
@@ -19,8 +19,6 @@ import com.krisjanis.balodis.model.Backtrace;
 import com.krisjanis.balodis.model.Problem;
 import com.krisjanis.balodis.model.Version;
 import com.krisjanis.balodis.service.BacktraceService;
-  
-
   
 @Controller  
 public class BacktraceController {
@@ -56,14 +54,24 @@ public class BacktraceController {
     		BindingResult result,
     		Map<String, Object> map,
     		RedirectAttributes attributes) {
- 
+    	
     	if (!result.hasErrors()){
-    		String now = (new java.util.Date()).toString();
-        	newBacktrace.setDate(now);
-        	backtraceService.addBacktrace(newBacktrace);
-    		String success = "SUCCESS! You have added a new backtrace. Backtrace count: " + backtraceService.listBacktraces().size();
-    		attributes.addFlashAttribute("message", success);
-    		return "redirect:/listBacktraces.html";
+    		String formInputCoredump = newBacktrace.getName();
+    		if (backtraceService.duplicateCheck(formInputCoredump, Backtrace.class, "name")) {
+    			String now = (new java.util.Date()).toString();
+            	newBacktrace.setDate(now);
+            	backtraceService.addBacktrace(newBacktrace);
+        		String success = "SUCCESS! You have added a new backtrace. Backtrace count: " + backtraceService.listBacktraces().size();
+        		attributes.addFlashAttribute("message", success);
+        		return "redirect:/listBacktraces.html";
+    		} else {
+    			String errorGlobal = "OOPS! Error occured!";
+    			map.put("message", errorGlobal);
+    			String errorDuplicate = "Duplicate record found!";
+        		map.put("messageDuplicate", errorDuplicate);
+    			map.put("problemList", backtraceService.listProblems());
+        		return "addBacktrace";
+    		}
     	} else {
     		String error = "OOPS! Error occured!";
     		map.put("problemList", backtraceService.listProblems());
@@ -103,13 +111,22 @@ public class BacktraceController {
     		RedirectAttributes attributes) {
     	
     	if (!result.hasErrors()){
-    		backtraceService.addVersion(newVersion);
-    		String success = "SUCCESS! You have added a new software version. Version count: " + backtraceService.listVersions().size();
-    		attributes.addFlashAttribute("message", success);
-    		return "redirect:/listVersions.html";
+    		String formInputVersion = newVersion.getVersion();
+    		if (backtraceService.duplicateCheck(formInputVersion, Version.class, "version")){
+    			backtraceService.addVersion(newVersion);
+        		String success = "SUCCESS! You have added a new software version. Version count: " + backtraceService.listVersions().size();
+        		attributes.addFlashAttribute("message", success);
+        		return "redirect:/listVersions.html";
+    		} else {
+    			String errorGlobal = "OOPS! Error occured!";
+        		map.put("message", errorGlobal);
+        		String errorDuplicate = "Duplicate record found!";
+        		map.put("messageDuplicate", errorDuplicate);
+        		return "addVersion";
+    		}
     	} else {
-    		String error = "OOPS! Error occured!";
-    		map.put("message", error);
+    		String errorGlobal = "OOPS! Error occured!";
+    		map.put("message", errorGlobal);
     		return "addVersion";
     	}
     }
@@ -139,10 +156,20 @@ public class BacktraceController {
     		RedirectAttributes attributes) {
     	
     	if (!result.hasErrors()){
-    		backtraceService.addProblem(newProblem);
-    		String success = "SUCCESS! You have added a new problem. Problem count: " + backtraceService.listProblems().size();
-    		attributes.addFlashAttribute("message", success);
-    		return "redirect:/listProblems.html";
+    		String formInputProblem = newProblem.getProblem();
+    		if (backtraceService.duplicateCheck(formInputProblem, Problem.class, "problem")){
+    			backtraceService.addProblem(newProblem);
+        		String success = "SUCCESS! You have added a new problem. Problem count: " + backtraceService.listProblems().size();
+        		attributes.addFlashAttribute("message", success);
+        		return "redirect:/listProblems.html";
+    		} else {
+    			String errorGlobal = "OOPS! Error occured!";
+        		map.put("message", errorGlobal);
+        		String errorDuplicate = "Duplicate record found!";
+        		map.put("messageDuplicate", errorDuplicate);
+        		map.put("versionList", backtraceService.listVersions());
+        		return "addProblem";
+    		}
     	} else {
     		String error = "OOPS! Error occured!";
     		map.put("message", error);

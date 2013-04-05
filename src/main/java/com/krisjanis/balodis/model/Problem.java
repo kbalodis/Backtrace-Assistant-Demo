@@ -14,15 +14,13 @@ import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
 @Entity  
 @Table(name="PROBLEM") 
 public class Problem {
 	
 	 @Id  
 	 @GeneratedValue(strategy=GenerationType.AUTO)  
-	 @Column(name = "ID", nullable = false)  
+	 @Column(name = "ID", nullable = false, unique = true)  
 	 private Integer id;  
 	 
 	 @NotNull

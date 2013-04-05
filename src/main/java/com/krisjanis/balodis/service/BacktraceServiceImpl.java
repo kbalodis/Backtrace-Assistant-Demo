@@ -88,7 +88,7 @@ public class BacktraceServiceImpl implements BacktraceService {
 	}  
 	
 	@Transactional
-	public Boolean strObjParm(String str, Class <?> c, String column) {
-		return backtraceDao.strObjParm(str, c, column);
+	public Boolean duplicateCheck(String str, Class <?> c, String column) {
+		return backtraceDao.duplicateCheck(str, c, column);
 	}
 }  

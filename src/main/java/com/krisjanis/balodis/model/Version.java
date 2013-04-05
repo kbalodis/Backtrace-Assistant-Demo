@@ -12,20 +12,16 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.krisjanis.balodis.model.validators.UniqueField;
-
-
 @Entity  
-@Table(name="VERSION") 
+@Table(name="VERSION")
 public class Version {
 	 
 	@Id  
 	@GeneratedValue(strategy=GenerationType.AUTO)  
-	@Column(name = "ID", nullable = false)  
+	@Column(name = "ID", nullable = false, unique = true)  
 	private Integer id;  
 	
 	@NotNull
-	//@UniqueField(entity = Version.class, property = "version")
     @Size(min = 1, max = 150, message = "Software version name is a required field!")
 	@Column(name="VERSION", nullable = false, unique = true)  
 	private String version; 
