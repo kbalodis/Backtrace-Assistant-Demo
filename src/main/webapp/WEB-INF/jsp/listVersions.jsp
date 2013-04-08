@@ -6,7 +6,7 @@
 	    <title>Backtrace Assistant Demo</title>
 	    <link href="<c:url value="/resources/bootstrap/css/bootstrap.css"/>" rel="stylesheet"  type="text/css" />
 	    <link href="<c:url value="/resources/bootstrap/css/bootstrap-responsive.css"/>" rel="stylesheet"  type="text/css" />  
-		<script>window.jQuery || document.write('<script src="<c:url value="/resources/jQuery/jquery-1.9.1.js"/>"><\/script>')</script>
+		<script>window.jQuery || document.write('<script src="<c:url value="/resources/jQuery/js/jquery-1.9.1.js"/>"><\/script>')</script>
 		<script src="<c:url value="/resources/bootstrap/js/bootstrap.js"/>"></script>
 		<link href="<c:url value="/resources/jQuery/css/theme.blue.css"/>" rel="stylesheet"/>   
 		<script src="<c:url value="/resources/jQuery/js/jquery-1.9.1.js"/>" type="text/javascript"></script>

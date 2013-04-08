@@ -8,7 +8,7 @@
 	    <link href="<c:url value="/resources/bootstrap/css/bootstrap.css"/>" rel="stylesheet"  type="text/css" />
 	    <link href="<c:url value="/resources/bootstrap/css/bootstrap-responsive.css"/>" rel="stylesheet"  type="text/css" />  
 		<script src="<c:url value="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"/>"></script>
-		<script>window.jQuery || document.write('<script src="<c:url value="/resources/jQuery/jquery-1.9.1.js"/>"><\/script>')</script>
+		<script>window.jQuery || document.write('<script src="<c:url value="/resources/jQuery/js/jquery-1.9.1.js"/>"><\/script>')</script>
 		<script src="<c:url value="/resources/bootstrap/js/bootstrap.js"/>"></script>
 	</head>
 	<body>
