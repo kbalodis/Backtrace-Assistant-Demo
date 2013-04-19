@@ -21,12 +21,12 @@ public class Backtrace{
 	private Integer id;  
 	
 	@NotNull
-	@Size(min = 1, max = 150, message = "Backtrace name is a required field!")
-	@Column(name="NAME", nullable = false, unique = true)  
+	@Size(min = 1, max = 150, message = "Please enter the process name!")
+	@Column(name="NAME", nullable = false)  
 	private String name; 
 	
 	@NotNull
-	@Size(min = 1, max = 2500, message = "Backtrace is a required field!")
+	@Size(min = 1, max = 2500, message = "Please enter the backtrace!")
 	@Column(name="BACKTRACE", nullable = false)  
 	private String backtrace; 
 	
@@ -37,7 +37,7 @@ public class Backtrace{
 	@JoinColumn(name="PROBLEM_ID", insertable = false, updatable = false)
 	private Problem problemId;
 	
-	@NotNull(message = "Please choose the corresponding problem of the backtrace!")
+	@NotNull(message = "Please select the corresponding problem of the backtrace!")
 	@Column(name="PROBLEM_ID", nullable = false)
 	private Integer probId;
 	 

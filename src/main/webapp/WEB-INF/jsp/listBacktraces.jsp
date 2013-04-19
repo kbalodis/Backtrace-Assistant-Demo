@@ -3,22 +3,39 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-	    <title>Backtrace Assistant Demo</title>
+	    <title>Backtrace Assistant Demo v0.2</title>
 	    <link href="<c:url value="/resources/bootstrap/css/bootstrap.css"/>" rel="stylesheet"  type="text/css" />
 	    <link href="<c:url value="/resources/bootstrap/css/bootstrap-responsive.css"/>" rel="stylesheet"  type="text/css" />  
 		<script>window.jQuery || document.write('<script src="<c:url value="/resources/jQuery/js/jquery-1.9.1.js"/>"><\/script>')</script>
-		<script src="<c:url value="/resources/bootstrap/js/bootstrap.js"/>"></script>
 		<link href="<c:url value="/resources/jQuery/css/theme.blue.css"/>" rel="stylesheet"/>   
 		<script src="<c:url value="/resources/jQuery/js/jquery-1.9.1.js"/>" type="text/javascript"></script>
 		<link class="ui-theme" rel="stylesheet" href="<c:url value="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/cupertino/jquery-ui.css"/>">
 		<script src="<c:url value="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7/jquery-ui.min.js"/>"></script>
 		<script src="<c:url value="/resources/jQuery/js/jquery.tablesorter.js"/>" type="text/javascript"></script>
+		<link href="<c:url value="/resources/jQuery/css/jquery.tablesorter.pager.css"/>" rel="stylesheet"/>   
 		<script src="<c:url value="/resources/jQuery/js/jquery.tablesorter.pager.js"/>" type="text/javascript"></script>
 		<script src="<c:url value="http://code.jquery.com/jquery-migrate-1.1.0.js"/>"></script>
 		<script src="<c:url value="/resources/jQuery/js/jquery.tablesorter.widgets.js"/>"></script>
+			<script src="<c:url value="/resources/bootstrap/js/bootstrap.js"/>"></script>
 		<script type="text/javascript">
 			$(function() {
-	
+				
+				// define pager options
+				var pagerOptions = {
+					// target the pager markup - see the HTML block below
+					container: $(".pager"),
+					// output string - default is '{page}/{totalPages}'; possible variables: {page}, {totalPages}, {startRow}, {endRow} and {totalRows}
+					output: '{startRow} - {endRow} / {filteredRows} ({totalRows})',
+					// if true, the table will remain the same height no matter how many records are displayed. The space is made up by an empty
+					// table row set to a height to compensate; default is false
+					fixedHeight: true,
+					// remove rows from the table to speed up the sort of large tables.
+					// setting this to false, only hides the non-visible rows; needed if you plan to add/remove rows with the pager enabled.
+					removeRows: false,
+					// go to page selector - select dropdown that sets the current page
+					cssGoto:	 '.gotoPage'
+				};	
+				
 				// call the tablesorter plugin
 				$("#myTable").tablesorter({
 					theme: 'blue',
@@ -31,6 +48,8 @@
 	
 					// headers: { 5: { sorter: false, filter: false } },
 	
+					headerTemplate : '{content} {icon}',
+					
 					widgetOptions : {
 	
 						// If there are child rows in the table (rows with class name from "cssChildRow" option)
@@ -74,7 +93,7 @@
 	
 					}
 				})
-				.tablesorterPager({container: $("#pager")}); 
+				.tablesorterPager(pagerOptions); 
 			});
 		</script>
 	</head>
@@ -83,42 +102,48 @@
 			<div class="navbar-inner">
 				<div class="container">
 					<ul class="nav">
-						<li class="active">
+						<li class="">
 							<a class="brand" href="index.html">Home</a>
 						</li>
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">LIST <b class="caret"></b></a>
 							<ul class="dropdown-menu">
-								<li><a href="listBacktraces.html">BACKTRACES</a></li>
+								<li><a href="listVersions.html">Software VERSIONS</a></li>
 			              		<li><a href="listProblems.html">PROBLEMS</a></li>
-			            		<li><a href="listVersions.html">Software VERSIONS</a></li>
+			            		<li><a href="listBacktraces.html">BACKTRACES</a></li>
 			            	</ul>
 			          	</li>
 			          	<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">ADD <b class="caret"></b></a>
 							<ul class="dropdown-menu">
-								<li><a href="addBacktraceForm.html">BACKTRACE</a></li>
-								<li><a href="addProblemForm.html">PROBLEM</a></li>
 								<li><a href="addVersionForm.html">Software VERSION</a></li>
+								<li><a href="addProblemForm.html">PROBLEM</a></li>
+								<li><a href="addBacktraceForm.html">BACKTRACE</a></li>
 			            	</ul>
 			          	</li>	
 					</ul>
 				</div>
 			</div>
 		</div>
-		<h1>List of Backtraces</h1>
+		<h1>
+			List of Backtraces 
+			<a class="btn btn-primary" href="addBacktraceForm.html">ADD</a>
+		</h1>
 		<c:if test="${!empty message}">
 		 	<div class="alert alert-success">
 		 		<div align="center">${message}</div>
 		 	</div>
 		</c:if>
 		<c:if test="${!empty backtraceList}">
-			<button class="reset">Reset</button>
+			<p class="help-block">TIP! To filter/search for more than one word per entry use: "&&" or "AND" (e.g. in case of three words: "one && two && three" or "one AND two AND three").</p>
+			<a href="#" rel="tooltip" data-original-title="Press RESET to clear all filtering/searching!">
+				<button class="reset btn">RESET</button>
+			</a>
 			<table id="myTable" class="tablesorter">
 				<thead>	
 					<tr>
 					    <th data-placeholder="Search...">Backtrace</th>
-					    <th data-placeholder="Search...">Name</th>
+					    <th data-placeholder="Search...">Process Name</th>
 					    <th data-placeholder="Search...">Date added</th>
 					    <th data-placeholder="Search...">Corresponding problem</th>
 					    <th data-placeholder="Search...">Date corresponding problem was reported</th>
@@ -143,21 +168,23 @@
 				    </tr>
 				</c:forEach>
 			</table>
-			<div id="pager" class="pager">
-				<form>
-					<img src="<c:url value="/resources/jQuery/img/first.png"/>" class="first"/>
-					<img src="<c:url value="/resources/jQuery/img/prev.png"/>" class="prev"/>
-					<input type="text" class="pagedisplay"/>
-					<img src="<c:url value="/resources/jQuery/img/next.png"/>" class="next"/>
-					<img src="<c:url value="/resources/jQuery/img/last.png"/>" class="last"/>
-					<select class="pagesize">
-						<option selected="selected"  value="10">10</option>
-						<option value="20">20</option>
-						<option value="30">30</option>
-						<option value="40">40</option>
-					</select>
-				</form>
+			<div class="pager">
+				Page: <select class="gotoPage"></select>
+				<img src="<c:url value="/resources/jQuery/img/first.png"/>" class="first" alt="First" title="First page"/>
+				<img src="<c:url value="/resources/jQuery/img/prev.png"/>" class="prev" alt="Prev" title="Previous page"/>
+				<span class="pagedisplay"></span>
+				<img src="<c:url value="/resources/jQuery/img/next.png"/>" class="next" alt="Next" title="Next page"/>
+				<img src="<c:url value="/resources/jQuery/img/last.png"/>" class="last" alt="Last" title= "Last page"/>
+				<select class="pagesize">
+					<option selected="selected" value="10">10</option>
+					<option value="20">20</option>
+					<option value="30">30</option>
+					<option value="40">40</option>
+				</select>
 			</div>			
 		</c:if>
+		<script>
+			$('[rel=tooltip]').tooltip();
+		</script>
 	</body>
 </html>

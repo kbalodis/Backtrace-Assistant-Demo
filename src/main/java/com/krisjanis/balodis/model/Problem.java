@@ -24,12 +24,12 @@ public class Problem {
 	 private Integer id;  
 	 
 	 @NotNull
-	 @Size(min = 1, max = 150, message = "Problem name is a required field!")
+	 @Size(min = 1, max = 150, message = "Please enter the problem name!")
 	 @Column(name="PROBLEM", nullable = false, unique = true)  
 	 private String problem; 
 	 
 	 @NotNull
-	 @Size(min = 10, max = 10, message = "Date the problem was reported is a required field!")
+	 @Size(min = 10, max = 10, message = "Please select the date the problem was reported!")
 	 @Column(name="DATE_REPORTED", nullable = false)
 	 private String dateReported;
 	 

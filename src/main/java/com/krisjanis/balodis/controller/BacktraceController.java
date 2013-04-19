@@ -1,7 +1,8 @@
 package com.krisjanis.balodis.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.Map; 
-//import java.util.Date;
+import java.util.Date;
 //import java.util.HashMap;
 
 import javax.validation.Valid;
@@ -27,8 +28,12 @@ public class BacktraceController {
     private BacktraceService backtraceService;
  
 	@RequestMapping("/index")
-    public String home() {
+    public String home(Map<String, Object> map) {
 		
+		map.put("versionCount", backtraceService.listVersions().size());
+		map.put("problemCount", backtraceService.listProblems().size());
+		map.put("backtraceCount", backtraceService.listBacktraces().size());
+						
         return "home";
     }
 	
@@ -55,10 +60,27 @@ public class BacktraceController {
     		Map<String, Object> map,
     		RedirectAttributes attributes) {
     	
+    	if (!result.hasErrors()) {
+    		Date nowTemp = new Date();
+			String now = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss").format(nowTemp);
+        	newBacktrace.setDate(now);
+        	backtraceService.addBacktrace(newBacktrace);
+    		String success = "SUCCESS! You have added a new backtrace. Backtrace count: " + backtraceService.listBacktraces().size();
+    		attributes.addFlashAttribute("message", success);
+    		return "redirect:/listBacktraces.html";
+    	} else {
+    		String error = "OOPS! Error occured!";
+    		map.put("problemList", backtraceService.listProblems());
+    		map.put("message", error);
+    		return "addBacktrace";
+    	}
+    	
+    	/**
     	if (!result.hasErrors()){
     		String formInputCoredump = newBacktrace.getName();
     		if (backtraceService.duplicateCheck(formInputCoredump, Backtrace.class, "name")) {
-    			String now = (new java.util.Date()).toString();
+    			Date nowTemp = new Date();
+    			String now = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss").format(nowTemp);
             	newBacktrace.setDate(now);
             	backtraceService.addBacktrace(newBacktrace);
         		String success = "SUCCESS! You have added a new backtrace. Backtrace count: " + backtraceService.listBacktraces().size();
@@ -78,6 +100,7 @@ public class BacktraceController {
     		map.put("message", error);
     		return "addBacktrace";
     	}
+    	**/
     }
  
     @RequestMapping("/delete/{backtraceId}")
@@ -150,6 +173,44 @@ public class BacktraceController {
     
     @RequestMapping(value = "/addNewProblem", method = RequestMethod.POST)
     public String addProblem(
+    		@Valid @ModelAttribute("newProblem") Problem newProblem, 
+    		BindingResult result,
+    		Map<String, Object> map,
+    		RedirectAttributes attributes) {
+    	
+    	if (!result.hasErrors()){
+    		String formInputProblem = newProblem.getProblem();
+    		if (backtraceService.duplicateCheck(formInputProblem, Problem.class, "problem")){
+    			backtraceService.addProblem(newProblem);
+        		String success = "SUCCESS! You have added a new problem. Problem count: " + backtraceService.listProblems().size();
+        		attributes.addFlashAttribute("message", success);
+        		return "redirect:/listProblems.html";
+    		} else {
+    			String errorGlobal = "OOPS! Error occured!";
+        		map.put("message", errorGlobal);
+        		String errorDuplicate = "Duplicate record found!";
+        		map.put("messageDuplicate", errorDuplicate);
+        		map.put("versionList", backtraceService.listVersions());
+        		return "addProblem";
+    		}
+    	} else {
+    		String error = "OOPS! Error occured!";
+    		map.put("message", error);
+    		map.put("versionList", backtraceService.listVersions());
+    		return "addProblem";
+    	}
+    }
+    
+    @RequestMapping(value = "/addProblemPopUpForm", method = RequestMethod.GET)
+    public String problemPopUpForm(Map<String, Object> map) {
+    	
+    	map.put("newProblem", new Problem());
+    	map.put("versionList", backtraceService.listVersions());
+    	return "addProblem";
+    }
+    
+    @RequestMapping(value = "/addNewProblemPopUP", method = RequestMethod.POST)
+    public String addProblemPopUp(
     		@Valid @ModelAttribute("newProblem") Problem newProblem, 
     		BindingResult result,
     		Map<String, Object> map,

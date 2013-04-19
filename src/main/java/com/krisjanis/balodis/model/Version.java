@@ -22,12 +22,12 @@ public class Version {
 	private Integer id;  
 	
 	@NotNull
-    @Size(min = 1, max = 150, message = "Software version name is a required field!")
+    @Size(min = 1, max = 150, message = "Please enter the software version name!")
 	@Column(name="VERSION", nullable = false, unique = true)  
 	private String version; 
 	
 	@NotNull
-	@Size(min = 10, max = 10, message = "Date the software version was released is a required field!")
+	@Size(min = 10, max = 10, message = "Please select the date the software version was released!")
 	@Column(name="DATE_RELEASED", nullable = false)
 	private String dateReleased;
 	
