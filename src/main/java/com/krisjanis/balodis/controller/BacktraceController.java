@@ -62,7 +62,7 @@ public class BacktraceController {
     	
     	if (!result.hasErrors()) {
     		Date nowTemp = new Date();
-			String now = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss").format(nowTemp);
+			String now = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(nowTemp);
         	newBacktrace.setDate(now);
         	backtraceService.addBacktrace(newBacktrace);
     		String success = "SUCCESS! You have added a new backtrace. Backtrace count: " + backtraceService.listBacktraces().size();

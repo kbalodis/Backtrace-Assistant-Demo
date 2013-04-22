@@ -26,6 +26,9 @@
 			    });
 			});
 		</script>
+		<style>
+			.datepicker{z-index:1151;}
+		</style>
 	</head>
 	<body>
 		<div class="navbar navbar-fixed-top"> 

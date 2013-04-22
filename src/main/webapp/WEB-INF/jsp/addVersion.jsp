@@ -6,6 +6,7 @@
 	<head>
 	    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	    <title>Backtrace Assistant Demo v0.2</title>
+	    <link href="<c:url value="/resources/reset.css"/>" rel="stylesheet" type="text/css" />
 	    <link href="<c:url value="/resources/bootstrap/css/bootstrap.css"/>" rel="stylesheet" type="text/css" />
 	    <link href="<c:url value="/resources/bootstrap/css/bootstrap-responsive.css"/>" rel="stylesheet" type="text/css" />
 	   	<link href="<c:url value="/resources/bootstrap/datepicker/css/datepicker.css"/>" rel="stylesheet" type="text/css" />
@@ -105,14 +106,17 @@
 			
 			$('#dp').datepicker({
 				format: 'yyyy-mm-dd',
+				autoclose: true,
 				onRender: function(date) {	
 			    	return date.valueOf() > now.valueOf() ? 'disabled' : '';
-				},
-				autoclose: true
+				}
 			});
 		</script>
 		<script>
 			$('[rel=tooltip]').tooltip(); 
 		</script>
+		<style>
+			.datepicker{z-index:1151;}
+		</style>
 	</body>
 </html>

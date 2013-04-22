@@ -5,6 +5,7 @@
 <html>
 	<head>
 	    <title>Backtrace Assistant Demo v0.2</title>
+	    <link href="<c:url value="/resources/reset.css"/>" rel="stylesheet" type="text/css" />
 	    <link href="<c:url value="/resources/bootstrap/css/bootstrap.css"/>" rel="stylesheet"  type="text/css" />
 	    <link href="<c:url value="/resources/bootstrap/css/bootstrap-responsive.css"/>" rel="stylesheet"  type="text/css" />  
 		<script src="<c:url value="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"/>"></script>
