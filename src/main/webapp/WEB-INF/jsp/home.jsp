@@ -4,7 +4,7 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-	    <title>Backtrace Assistant Demo v0.2</title>
+	    <title>Backtrace Assistant Demo v0.3</title>
 	    <link href="<c:url value="/resources/reset.css"/>" rel="stylesheet" type="text/css" />
 	    <link href="<c:url value="/resources/bootstrap/css/bootstrap.css"/>" rel="stylesheet"  type="text/css" />
 	    <link href="<c:url value="/resources/bootstrap/css/bootstrap-responsive.css"/>" rel="stylesheet"  type="text/css" />  
@@ -18,30 +18,33 @@
 				<div class="container">
 					<ul class="nav">
 						<li class="">
-							<a class="brand" href="index.html">Home</a>
+							<a class="brand" href="<c:url value="/index.html"/>">Home</a>
 						</li>
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">LIST <b class="caret"></b></a>
 							<ul class="dropdown-menu">
-								<li><a href="listVersions.html">Software VERSIONS</a></li>
-			              		<li><a href="listProblems.html">PROBLEMS</a></li>
-			            		<li><a href="listBacktraces.html">BACKTRACES</a></li>
+								<li><a href="<c:url value="/listVersions.html"/>">Software VERSIONS</a></li>
+			              		<li><a href="<c:url value="/listProblems.html"/>">PROBLEMS</a></li>
+			            		<li><a href="<c:url value="/listBacktraces.html"/>">BACKTRACES</a></li>
 			            	</ul>
 			          	</li>
 			          	<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">ADD <b class="caret"></b></a>
 							<ul class="dropdown-menu">
-								<li><a href="addVersionForm.html">Software VERSION</a></li>
-								<li><a href="addProblemForm.html">PROBLEM</a></li>
-								<li><a href="addBacktraceForm.html">BACKTRACE</a></li>
+								<li><a href="<c:url value="/addVersionForm.html"/>">Software VERSION</a></li>
+								<li><a href="<c:url value="/addProblemForm.html"/>">PROBLEM</a></li>
+								<li><a href="<c:url value="/addBacktraceForm.html"/>">BACKTRACE</a></li>
 			            	</ul>
-			          	</li>	
+			          	</li>
+			          	<li class="">
+							<a href="<c:url value="/listComments.html"/>">COMMENTS</a>
+						</li>	
 					</ul>
 				</div>
 			</div>
 		</div>
 		<div>
-			<h1>Backtrace Assistant Demo v0.2</h1>		
+			<h1>Backtrace Assistant Demo v0.3</h1>		
 		</div>
 		<h2>Brief Explanations (README)</h2>
 		<p>This initial page is aimed at giving brief explanations about the application and its usage.</p>

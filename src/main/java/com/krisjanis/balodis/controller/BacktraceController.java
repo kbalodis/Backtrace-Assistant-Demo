@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.krisjanis.balodis.model.Backtrace;
+import com.krisjanis.balodis.model.Comment;
 import com.krisjanis.balodis.model.Problem;
 import com.krisjanis.balodis.model.Version;
 import com.krisjanis.balodis.service.BacktraceService;
@@ -45,6 +46,14 @@ public class BacktraceController {
         return "listBacktraces";
     }
  
+    @RequestMapping("/viewBacktrace/{backtraceId}")
+    public String viewBacktrace(@PathVariable("backtraceId") Integer backtraceId, Map<String, Object> map) {
+ 
+        map.put("backtrace", backtraceService.viewBacktrace(backtraceId));
+ 
+        return "viewBacktrace";
+    }
+    
     @RequestMapping(value = "/addBacktraceForm", method = RequestMethod.GET)
     public String backtraceForm(Map<String, Object> map) {
     	
@@ -62,8 +71,10 @@ public class BacktraceController {
     	
     	if (!result.hasErrors()) {
     		Date nowTemp = new Date();
-			String now = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(nowTemp);
+			String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(nowTemp);
         	newBacktrace.setDate(now);
+        	newBacktrace.setDateModified(now);
+        	newBacktrace.setIsDeleted(false);
         	backtraceService.addBacktrace(newBacktrace);
     		String success = "SUCCESS! You have added a new backtrace. Backtrace count: " + backtraceService.listBacktraces().size();
     		attributes.addFlashAttribute("message", success);
@@ -74,41 +85,57 @@ public class BacktraceController {
     		map.put("message", error);
     		return "addBacktrace";
     	}
+    }
+ 
+    @RequestMapping("/deleteBacktrace/{backtraceId}")
+    public String deleteBacktrace(
+    		@PathVariable("backtraceId") Integer backtraceId,
+    		RedirectAttributes attributes) {
+ 
+    	backtraceService.removeBacktrace(backtraceId);
+    	String success = "You have successfully deleted a backtrace. Backtrace count: " + backtraceService.listBacktraces().size();
+		attributes.addFlashAttribute("message", success);
+		
+        return "redirect:/listBacktraces.html";
+    }
+    
+    @RequestMapping(value = "/editBacktraceForm/{backtraceId}", method = RequestMethod.GET)
+    public String backtraceEditForm(
+    		@PathVariable("backtraceId") Integer backtraceId,
+    		Map<String, Object> map) {
     	
-    	/**
-    	if (!result.hasErrors()){
-    		String formInputCoredump = newBacktrace.getName();
-    		if (backtraceService.duplicateCheck(formInputCoredump, Backtrace.class, "name")) {
-    			Date nowTemp = new Date();
-    			String now = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss").format(nowTemp);
-            	newBacktrace.setDate(now);
-            	backtraceService.addBacktrace(newBacktrace);
-        		String success = "SUCCESS! You have added a new backtrace. Backtrace count: " + backtraceService.listBacktraces().size();
-        		attributes.addFlashAttribute("message", success);
-        		return "redirect:/listBacktraces.html";
-    		} else {
-    			String errorGlobal = "OOPS! Error occured!";
-    			map.put("message", errorGlobal);
-    			String errorDuplicate = "Duplicate record found!";
-        		map.put("messageDuplicate", errorDuplicate);
-    			map.put("problemList", backtraceService.listProblems());
-        		return "addBacktrace";
-    		}
+    	map.put("backtrace", backtraceService.getBacktrace(backtraceId));
+    	map.put("problemList", backtraceService.listProblems());
+    	return "editBacktrace";
+    }
+    
+    @RequestMapping(value = "/editBacktrace/{backtraceId}", method = RequestMethod.POST)
+    public String editBacktrace(
+    		@ModelAttribute("backtrace") @Valid Backtrace backtrace,
+    		BindingResult result,
+    		@PathVariable("backtraceId") Integer backtraceId,
+    		Map<String, Object> map,
+    		RedirectAttributes attributes) {
+    	
+    	if (!result.hasErrors()) {
+    		Backtrace tempBacktrace = backtraceService.getBacktrace(backtraceId);
+    		Date nowTemp = new Date();
+			String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(nowTemp);
+        	backtrace.setDateModified(now);
+        	backtrace.setDate(tempBacktrace.getDate());
+        	backtrace.setIsDeleted(false);
+        	backtrace.setId(backtraceId);
+        	backtraceService.updateBacktrace(backtrace);
+    		String success = "SUCCESS! You have updated the backtrace. Backtrace count: " + backtraceService.listBacktraces().size();
+    		attributes.addFlashAttribute("message", success);
+    		return "redirect:/listBacktraces.html";
     	} else {
     		String error = "OOPS! Error occured!";
     		map.put("problemList", backtraceService.listProblems());
     		map.put("message", error);
-    		return "addBacktrace";
+    		//map.put("backtrace", backtraceService.getBacktrace(backtraceId));
+    		return "editBacktrace";
     	}
-    	**/
-    }
- 
-    @RequestMapping("/delete/{backtraceId}")
-    public String deleteContact(@PathVariable("backtraceId") Integer backtraceId) {
- 
-        backtraceService.removeBacktrace(backtraceId);
- 
-        return "redirect:/listBacktraces.html";
     }
     
     @RequestMapping("/listVersions")
@@ -136,6 +163,11 @@ public class BacktraceController {
     	if (!result.hasErrors()){
     		String formInputVersion = newVersion.getVersion();
     		if (backtraceService.duplicateCheck(formInputVersion, Version.class, "version")){
+    			Date nowTemp = new Date();
+    			String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(nowTemp);
+            	newVersion.setDate(now);
+            	newVersion.setDateModified(now);
+            	newVersion.setIsDeleted(false);
     			backtraceService.addVersion(newVersion);
         		String success = "SUCCESS! You have added a new software version. Version count: " + backtraceService.listVersions().size();
         		attributes.addFlashAttribute("message", success);
@@ -154,6 +186,63 @@ public class BacktraceController {
     	}
     }
     
+    @RequestMapping(value = "/editVersionForm/{versionId}", method = RequestMethod.GET)
+    public String versionEditForm(
+    		@PathVariable("versionId") Integer versionId,
+    		Map<String, Object> map) {
+    	
+    	map.put("version", backtraceService.getVersion(versionId));
+    	return "editVersion";
+    }
+    
+    @RequestMapping(value = "/editVersion/{versionId}", method = RequestMethod.POST)
+    public String editVersion(
+    		@Valid @ModelAttribute("version") Version version,
+    		BindingResult result,
+    		@PathVariable("versionId") Integer versionId,
+    		Map<String, Object> map,
+    		RedirectAttributes attributes) {
+    	
+    	if (!result.hasErrors()){
+    		String formInputVersion = version.getVersion();
+    		Version tempVersion = backtraceService.getVersion(versionId);
+    		if ((tempVersion.getVersion()).equals(formInputVersion)) {
+    			Date nowTemp = new Date();
+    			String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(nowTemp);
+            	version.setDateModified(now);
+            	version.setDate(tempVersion.getDate());
+            	version.setIsDeleted(false);
+            	version.setId(versionId);
+    			backtraceService.updateVersion(version);
+        		String success = "SUCCESS! You have added a new software version. Version count: " + backtraceService.listVersions().size();
+        		attributes.addFlashAttribute("message", success);
+        		return "redirect:/listVersions.html";
+    		} else {
+	    		if (backtraceService.duplicateCheck(formInputVersion, Version.class, "version")){
+	    			Date nowTemp = new Date();
+	    			String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(nowTemp);
+	            	version.setDateModified(now);
+	            	version.setDate(tempVersion.getDate());
+	            	version.setIsDeleted(false);
+	            	version.setId(versionId);
+	    			backtraceService.updateVersion(version);
+	        		String success = "SUCCESS! You have added a new software version. Version count: " + backtraceService.listVersions().size();
+	        		attributes.addFlashAttribute("message", success);
+	        		return "redirect:/listVersions.html";
+	    		} else {
+	    			String errorGlobal = "OOPS! Error occured!";
+	        		map.put("message", errorGlobal);
+	        		String errorDuplicate = "Duplicate record found!";
+	        		map.put("messageDuplicate", errorDuplicate);
+	        		return "editVersion";
+	    		}
+    		}
+    	} else {
+    		String errorGlobal = "OOPS! Error occured!";
+    		map.put("message", errorGlobal);
+    		return "editVersion";
+    	}
+    }
     
     @RequestMapping("/listProblems")
     public String listProblems(Map<String, Object> map) {
@@ -181,6 +270,11 @@ public class BacktraceController {
     	if (!result.hasErrors()){
     		String formInputProblem = newProblem.getProblem();
     		if (backtraceService.duplicateCheck(formInputProblem, Problem.class, "problem")){
+    			Date nowTemp = new Date();
+    			String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(nowTemp);
+            	newProblem.setDate(now);
+            	newProblem.setDateModified(now);
+            	newProblem.setIsDeleted(false);
     			backtraceService.addProblem(newProblem);
         		String success = "SUCCESS! You have added a new problem. Problem count: " + backtraceService.listProblems().size();
         		attributes.addFlashAttribute("message", success);
@@ -201,41 +295,99 @@ public class BacktraceController {
     	}
     }
     
-    @RequestMapping(value = "/addProblemPopUpForm", method = RequestMethod.GET)
-    public String problemPopUpForm(Map<String, Object> map) {
+    @RequestMapping(value = "/editProblemForm/{problemId}", method = RequestMethod.GET)
+    public String problemEditForm(
+    		@PathVariable("problemId") Integer problemId,
+    		Map<String, Object> map) {
     	
-    	map.put("newProblem", new Problem());
+    	map.put("problem", backtraceService.getProblem(problemId));
     	map.put("versionList", backtraceService.listVersions());
-    	return "addProblem";
+    	return "editProblem";
     }
     
-    @RequestMapping(value = "/addNewProblemPopUP", method = RequestMethod.POST)
-    public String addProblemPopUp(
-    		@Valid @ModelAttribute("newProblem") Problem newProblem, 
+    @RequestMapping(value = "/editProblem/{problemId}", method = RequestMethod.POST)
+    public String editProblem(
+    		@Valid @ModelAttribute("problem") Problem problem,
     		BindingResult result,
+    		@PathVariable("problemId") Integer problemId,
     		Map<String, Object> map,
     		RedirectAttributes attributes) {
     	
     	if (!result.hasErrors()){
-    		String formInputProblem = newProblem.getProblem();
-    		if (backtraceService.duplicateCheck(formInputProblem, Problem.class, "problem")){
-    			backtraceService.addProblem(newProblem);
-        		String success = "SUCCESS! You have added a new problem. Problem count: " + backtraceService.listProblems().size();
+    		String formInputProblem = problem.getProblem();
+    		Problem tempProblem = backtraceService.getProblem(problemId);
+    		if ((tempProblem.getProblem()).equals(formInputProblem)) {
+    			Date nowTemp = new Date();
+    			String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(nowTemp);
+            	problem.setDateModified(now);
+            	problem.setDate(tempProblem.getDate());
+            	problem.setIsDeleted(false);
+            	problem.setId(problemId);
+    			backtraceService.updateProblem(problem);
+        		String success = "SUCCESS! You have added a new software version. Version count: " + backtraceService.listVersions().size();
         		attributes.addFlashAttribute("message", success);
         		return "redirect:/listProblems.html";
     		} else {
-    			String errorGlobal = "OOPS! Error occured!";
-        		map.put("message", errorGlobal);
-        		String errorDuplicate = "Duplicate record found!";
-        		map.put("messageDuplicate", errorDuplicate);
-        		map.put("versionList", backtraceService.listVersions());
-        		return "addProblem";
+	    		if (backtraceService.duplicateCheck(formInputProblem, Problem.class, "problem")){
+	    			Date nowTemp = new Date();
+	    			String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(nowTemp);
+	            	problem.setDateModified(now);
+	            	problem.setDate(tempProblem.getDate());
+	            	problem.setIsDeleted(false);
+	            	problem.setId(problemId);
+	    			backtraceService.updateProblem(problem);
+	        		String success = "SUCCESS! You have added a new software version. Version count: " + backtraceService.listVersions().size();
+	        		attributes.addFlashAttribute("message", success);
+	        		return "redirect:/listProblems.html";
+	    		} else {
+	    			String errorGlobal = "OOPS! Error occured!";
+	        		map.put("message", errorGlobal);
+	        		String errorDuplicate = "Duplicate record found!";
+	        		map.put("messageDuplicate", errorDuplicate);
+	        		map.put("versionList", backtraceService.listVersions());
+	        		return "editProblem";
+	    		}
     		}
     	} else {
-    		String error = "OOPS! Error occured!";
-    		map.put("message", error);
+    		String errorGlobal = "OOPS! Error occured!";
+    		map.put("message", errorGlobal);
     		map.put("versionList", backtraceService.listVersions());
-    		return "addProblem";
+    		return "editProblem";
     	}
+    }
+    
+    @RequestMapping("/listComments")
+    public String listComments(Map<String, Object> map) {
+ 
+    	map.put("comment", new Comment());
+        map.put("commentList", backtraceService.listComments());
+ 
+        return "comments";
+    }
+    
+    @RequestMapping(value = "/addComment", method = RequestMethod.POST)
+    public String addComment(
+    		@Valid @ModelAttribute("comment") Comment comment, 
+    		BindingResult result,
+    		Map<String, Object> map) {
+ 
+        if (!result.hasErrors()) {
+        	if (comment.getAuthor() == ""){
+        		comment.setAuthor("anonymous");
+        	}
+        	Date nowTemp = new Date();
+			String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(nowTemp);
+        	comment.setDate(now);
+        	comment.setIsDeleted(false);
+        	backtraceService.addComment(comment);
+        	map.put("comment", new Comment());
+            map.put("commentList", backtraceService.listComments());
+            return "comments";
+        } else {
+        	String errorGlobal = "OOPS! Error occured while adding comment!";
+        	map.put("message", errorGlobal);
+            map.put("commentList", backtraceService.listComments());
+        	return "comments";
+        } 	
     }
 }

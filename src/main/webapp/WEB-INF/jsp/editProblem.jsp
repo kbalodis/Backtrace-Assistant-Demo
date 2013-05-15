@@ -4,13 +4,13 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-	    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	    <title>Backtrace Assistant Demo v0.3</title>
 	    <link href="<c:url value="/resources/reset.css"/>" rel="stylesheet" type="text/css" />
 	    <link href="<c:url value="/resources/bootstrap/css/bootstrap.css"/>" rel="stylesheet" type="text/css" />
 	    <link href="<c:url value="/resources/bootstrap/css/bootstrap-responsive.css"/>" rel="stylesheet" type="text/css" />
 	   	<link href="<c:url value="/resources/bootstrap/datepicker/css/datepicker.css"/>" rel="stylesheet" type="text/css" />
 		<link href="<c:url value="/resources/bootstrap/datepicker/less/datepicker.less"/>" rel="stylesheet" type="text/less" />
+		<script src="<c:url value="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"/>"></script>
 		<script>window.jQuery || document.write('<script src="<c:url value="/resources/jQuery/js/jquery-1.9.1.js"/>"><\/script>')</script>
 		<link href="<c:url value="/resources/jQuery/css/jquery-ui-1.8.17.custom.css"/>" rel="stylesheet" type="text/css" />
 		<script src="<c:url value="/resources/jQuery/js/jquery-ui-1.8.17.custom.min.js"/>"></script>		
@@ -18,17 +18,6 @@
 		<style>
 			.datepicker{z-index:1151;}
 		</style>
-		<script type="text/javascript">
-		    $(function () {
-		        $('#date, #version').bind('change keyup', function () {      
-		        	if ($('#date').val() != '' && $('#version').val() != '') {
-				      	$(this).closest('form').find(':submit').removeAttr('disabled');
-		        	} else {
-			      		$(this).closest('form').find(':submit').attr('disabled', 'disabled');      
-			      	}
-			    });
-			});
-		</script>
 	</head>
 	<body>
 		<div class="navbar navbar-fixed-top"> 
@@ -62,62 +51,74 @@
 			</div>
 		</div>
 		<c:if test="${!empty message}">
-			<div class="alert alert-error">
-		 		<div align="center">${message}</div>
-			</div>
-		</c:if> 
-		<form:form id="form" class="form-horizontal" method="post" action="addNewVersion.html" commandName="newVersion">		 
-			<fieldset>
+		 		<div class="alert alert-error">
+		 			<div align="center">${message}</div>
+		 		</div>
+		</c:if>
+		<form:form class="form-horizontal" method="post" action="/editProblem/${problem.id}.html" commandName="problem">		 
+		    <fieldset>
 				<div align="center">
-					<legend>Add a Software Version!</legend>
+					<legend>Edit a Problem!</legend>
 				</div>
 				<div class="control-group">
-					<form:label class="control-label" path="dateReleased">
-						Release Date:
-					</form:label>
-					<div class="controls"> 
-						<div class="input-append date" id="dp" data-date="" data-date-format="yyyy-mm-dd">
-							 <form:input id="date" class="span2" size="16" type="text" value="" readonly="true" path="dateReleased"/>
-							 <span class="add-on"><i class="icon-calendar"></i></span>
+					<form:label class="control-label" path="versId">
+						Software version:
+					</form:label>   
+					<div class="controls">
+						<form:select id="version" path="versId">
+							<form:option value="" label="--- Select ---" />
+							<c:forEach items="${versionList}" var="theVersion">
+						    	<form:option value="${theVersion.id}"><c:out value="${theVersion.version}, release date: ${theVersion.dateReleased}"/></form:option>
+					    	</c:forEach>
+					    </form:select>
+					    <form:errors class="alert alert-info" path="versId" />
+					</div>
+				</div>
+				<div class="control-group">
+			        <form:label class="control-label" path="dateReported">
+			       		Date Reported:
+			        </form:label>
+			        <div class="controls">
+			        	<div class="input-append date" id="dp" data-date="">
+						  	<form:input id="date" class="span2" size="16" type="text" value="" path="dateReported" readonly="true"/>
+						 	<span class="add-on"><i class="icon-calendar"></i></span>
 						</div>
-						<form:errors class="alert alert-info" path="dateReleased" />
-			    	</div>
-			    </div>
-		    	<div class="control-group">   
-				    <form:label class="control-label" path="version">
-				    	Version:
+						<form:errors class="alert alert-info" path="dateReported" />
+			        </div>
+		     	</div>
+				<div class="control-group">
+				    <form:label class="control-label" path="problem">
+				    	Problem name:
 				    </form:label>
-				    <div class="controls"> 
-				    	<form:input id="version" type="text" class="input-xlarge" path="version" />
-	 					<form:errors class="alert alert-info" path="version" />
-	 					<c:if test="${!empty messageDuplicate}">
-						 	<span class="alert alert-info">${messageDuplicate}</span>
+				    <div class="controls">
+				    	<form:input id="name" type="text" class="input-xlarge" path="problem"/>
+				    	<form:errors class="alert alert-info" path="problem" />
+				    	<c:if test="${!empty messageDuplicate}">
+							<span class="alert alert-info">${messageDuplicate}</span>
 						</c:if> 
 				    </div>
-				</div>
+				</div>   
 				<div class="form-actions">
-					<button type="submit" value="SAVE" class="btn btn-primary" id="submit" disabled="disabled">SAVE</button>
-					<button type="reset" value="RESET" class="btn" id="reset">CLEAR</button>
+					<button type="submit" value="SAVE" class="btn btn-primary" id="submit">SAVE</button>
 				</div>
-		 	</fieldset>
-		</form:form>	     
+			</fieldset>
+		</form:form>	
 		<script src="<c:url value="/resources/bootstrap/datepicker/js/bootstrap-datepicker.js"/> " type="text/javascript" charset="UTF-8"></script>
 		<script type="text/javascript">
 			var nowTemp = new Date();
 			var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
-			
-			$('#dp').datepicker({
+			 
+			var checkin = $('#dp').datepicker({
 				format: 'yyyy-mm-dd',
-				autoclose: true,
-				onRender: function(date) {	
+				onRender: function(date) {
 			    	return date.valueOf() > now.valueOf() ? 'disabled' : '';
 				}
 			});
 		</script>
 		<script>
-			$('#dp').tooltip({'trigger':'hover', 'title': 'Please, add release date of the software version!'}); 
-			$('#version').tooltip({'trigger':'hover', 'title': 'Please, add the name of the software version!'});
-			$('#reset').tooltip({'trigger':'hover', 'title': 'To reset all the input fields press CLEAR button!'}); 
+			$('#version').tooltip({'trigger':'hover', 'title': 'Please, select the software version that produced the corresponding problem!'});
+			$('#dp').tooltip({'trigger':'hover', 'title': 'Please, add the date the problem was reported!'}); 
+			$('#name').tooltip({'trigger':'hover', 'title': 'Please, add the name of the problem!'}); 
 		</script>
 	</body>
 </html>

@@ -18,17 +18,6 @@
 		<style>
 			.datepicker{z-index:1151;}
 		</style>
-		<script type="text/javascript">
-		    $(function () {
-		        $('#date, #version').bind('change keyup', function () {      
-		        	if ($('#date').val() != '' && $('#version').val() != '') {
-				      	$(this).closest('form').find(':submit').removeAttr('disabled');
-		        	} else {
-			      		$(this).closest('form').find(':submit').attr('disabled', 'disabled');      
-			      	}
-			    });
-			});
-		</script>
 	</head>
 	<body>
 		<div class="navbar navbar-fixed-top"> 
@@ -66,10 +55,10 @@
 		 		<div align="center">${message}</div>
 			</div>
 		</c:if> 
-		<form:form id="form" class="form-horizontal" method="post" action="addNewVersion.html" commandName="newVersion">		 
+		<form:form id="form" class="form-horizontal" method="post" action="/editVersion/${version.id}.html" commandName="version">		 
 			<fieldset>
 				<div align="center">
-					<legend>Add a Software Version!</legend>
+					<legend>Edit a Software Version!</legend>
 				</div>
 				<div class="control-group">
 					<form:label class="control-label" path="dateReleased">
@@ -96,8 +85,7 @@
 				    </div>
 				</div>
 				<div class="form-actions">
-					<button type="submit" value="SAVE" class="btn btn-primary" id="submit" disabled="disabled">SAVE</button>
-					<button type="reset" value="RESET" class="btn" id="reset">CLEAR</button>
+					<button type="submit" value="SAVE" class="btn btn-primary" id="submit">SAVE</button>
 				</div>
 		 	</fieldset>
 		</form:form>	     
@@ -117,7 +105,6 @@
 		<script>
 			$('#dp').tooltip({'trigger':'hover', 'title': 'Please, add release date of the software version!'}); 
 			$('#version').tooltip({'trigger':'hover', 'title': 'Please, add the name of the software version!'});
-			$('#reset').tooltip({'trigger':'hover', 'title': 'To reset all the input fields press CLEAR button!'}); 
 		</script>
 	</body>
 </html>

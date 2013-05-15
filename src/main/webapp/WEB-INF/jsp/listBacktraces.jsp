@@ -3,7 +3,7 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-	    <title>Backtrace Assistant Demo v0.2</title>
+	    <title>Backtrace Assistant Demo v0.3</title>
 	    <link href="<c:url value="/resources/reset.css"/>" rel="stylesheet" type="text/css" />
 	    <link href="<c:url value="/resources/bootstrap/css/bootstrap.css"/>" rel="stylesheet"  type="text/css" />
 	    <link href="<c:url value="/resources/bootstrap/css/bootstrap-responsive.css"/>" rel="stylesheet"  type="text/css" />  
@@ -17,7 +17,7 @@
 		<script src="<c:url value="/resources/jQuery/js/jquery.tablesorter.pager.js"/>" type="text/javascript"></script>
 		<script src="<c:url value="http://code.jquery.com/jquery-migrate-1.1.0.js"/>"></script>
 		<script src="<c:url value="/resources/jQuery/js/jquery.tablesorter.widgets.js"/>"></script>
-			<script src="<c:url value="/resources/bootstrap/js/bootstrap.js"/>"></script>
+		<script src="<c:url value="/resources/bootstrap/js/bootstrap.js"/>"></script>
 		<script type="text/javascript">
 			$(function() {
 				
@@ -104,24 +104,27 @@
 				<div class="container">
 					<ul class="nav">
 						<li class="">
-							<a class="brand" href="index.html">Home</a>
+							<a class="brand" href="<c:url value="/index.html"/>">Home</a>
 						</li>
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">LIST <b class="caret"></b></a>
 							<ul class="dropdown-menu">
-								<li><a href="listVersions.html">Software VERSIONS</a></li>
-			              		<li><a href="listProblems.html">PROBLEMS</a></li>
-			            		<li><a href="listBacktraces.html">BACKTRACES</a></li>
+								<li><a href="<c:url value="/listVersions.html"/>">Software VERSIONS</a></li>
+			              		<li><a href="<c:url value="/listProblems.html"/>">PROBLEMS</a></li>
+			            		<li><a href="<c:url value="/listBacktraces.html"/>">BACKTRACES</a></li>
 			            	</ul>
 			          	</li>
 			          	<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">ADD <b class="caret"></b></a>
 							<ul class="dropdown-menu">
-								<li><a href="addVersionForm.html">Software VERSION</a></li>
-								<li><a href="addProblemForm.html">PROBLEM</a></li>
-								<li><a href="addBacktraceForm.html">BACKTRACE</a></li>
+								<li><a href="<c:url value="/addVersionForm.html"/>">Software VERSION</a></li>
+								<li><a href="<c:url value="/addProblemForm.html"/>">PROBLEM</a></li>
+								<li><a href="<c:url value="/addBacktraceForm.html"/>">BACKTRACE</a></li>
 			            	</ul>
-			          	</li>	
+			          	</li>
+			          	<li class="">
+							<a href="<c:url value="/listComments.html"/>">COMMENTS</a>
+						</li>	
 					</ul>
 				</div>
 			</div>
@@ -136,16 +139,13 @@
 		 	</div>
 		</c:if>
 		<c:if test="${!empty backtraceList}">
-			<p class="help-block">TIP! To filter/search for more than one word per entry use: "&&" or "AND" (e.g. in case of three words: "one && two && three" or "one AND two AND three").</p>
-			<a href="#" rel="tooltip" data-original-title="Press RESET to clear all filtering/searching!">
-				<button class="reset btn">RESET</button>
-			</a>
+			<button class="reset btn" id="reset">RESET</button>
 			<table id="myTable" class="tablesorter">
-				<thead>	
+				<thead id="search">	
 					<tr>
 					    <th data-placeholder="Search...">Backtrace</th>
 					    <th data-placeholder="Search...">Process Name</th>
-					    <th data-placeholder="Search...">Date added</th>
+					    <th data-placeholder="Search...">Date added/date modfied</th>
 					    <th data-placeholder="Search...">Corresponding problem</th>
 					    <th data-placeholder="Search...">Date corresponding problem was reported</th>
 					    <th data-placeholder="Search...">Corresponding software version</th>
@@ -155,13 +155,15 @@
 				<c:forEach items="${backtraceList}" var="backtrace">
 				    <tr>
 				        <td>
-				        	<textarea rows="5" readonly="true">${backtrace.backtrace}</textarea>
+				        	<textarea rows="15" style="width: 400px;" readonly="true">${backtrace.backtrace}</textarea>
+				        	<p>
+				        		<a href="viewBacktrace/${backtrace.id}.html">view</a> | 
+				        		<a href="editBacktraceForm/${backtrace.id}.html">edit</a> |
+								<a href="deleteBacktrace/${backtrace.id}.html">delete</a>
+							</p>				        
 				        </td>
-				        <td>
-				        	${backtrace.name}
-				        	<p><a href="delete/${backtrace.id}.html">delete</a></p>
-				        </td>
-				        <td>${backtrace.date}</td>
+				        <td>${backtrace.name}</td>
+				        <td>${backtrace.date} / ${backtrace.dateModified}</td>
 				        <td>${backtrace.problemId.getProblem()}</td>
 				        <td>${backtrace.problemId.getDateReported()}</td>
 				        <td>${backtrace.problemId.getVersionId().getVersion()}</td>
@@ -185,7 +187,8 @@
 			</div>			
 		</c:if>
 		<script>
-			$('[rel=tooltip]').tooltip();
+			$('#myTable').tooltip({'trigger':'hover', 'title': 'To filter/search for more than one word use logic operators: e.g. in case of three words per entry use "one && two && three" or "one AND two AND three"!'});
+			$('#reset').tooltip({'trigger':'hover', 'title': 'Press RESET to clear all filtering/searching!'}); 
 		</script>
 	</body>
 </html>

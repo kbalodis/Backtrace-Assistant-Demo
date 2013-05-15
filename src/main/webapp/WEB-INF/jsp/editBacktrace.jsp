@@ -13,17 +13,6 @@
 		<link href="<c:url value="/resources/jQuery/css/jquery-ui-1.8.17.custom.css"/>" rel="stylesheet" type="text/css" />
 		<script src="<c:url value="/resources/jQuery/js/jquery-ui-1.8.17.custom.min.js"/>"></script>		
 		<script src="<c:url value="/resources/bootstrap/js/bootstrap.js"/>"></script>
-		<script type="text/javascript">
-		    $(function () {
-		        $('#problem, #backtrace, #process').bind('change keyup', function () {      
-		        	if ($('#problem').val() != '' && $('#backtrace').val() != '' && $('#process').val() != '') {
-				      	$(this).closest('form').find(':submit').removeAttr('disabled');
-		        	} else {
-			      		$(this).closest('form').find(':submit').attr('disabled', 'disabled');      
-			      	}
-			    });
-			});
-		</script>
 	</head>
 	<body>
 		<div class="navbar navbar-fixed-top"> 
@@ -61,10 +50,10 @@
 		 			<div align="center">${message}</div>
 		 		</div>
 		</c:if>
-		<form:form class="form-horizontal" method="post" action="addNewBacktrace.html" commandName="newBacktrace">		 
+		<form:form class="form-horizontal" method="post" action="/editBacktrace/${backtrace.id}.html" commandName="backtrace">		 
 		    <fieldset>
 		    	<div align="center">
-		    		<legend>Add a Backtrace!</legend> 
+		    		<legend>Edit a Backtrace!</legend> 
 		    	</div>
 		    	<div class="control-group"> 
 					<form:label class="control-label" path="probId">
@@ -72,7 +61,7 @@
 					</form:label>
 					<div class="controls">
 						<form:select id="problem" path="probId">
-							<form:option value="" label="--- Select ---"/>
+							<form:option value="" label="--- Select ---" />
 								<c:forEach items="${problemList}" var="theProblem">
 									<form:option value="${theProblem.id}"><c:out value="${theProblem.problem}, date reported: ${theProblem.dateReported}, software version: ${theProblem.versionId.getVersion()}"/></form:option>
 								</c:forEach>
@@ -82,10 +71,10 @@
 			    </div>
 		    	<div class="control-group"> 	        
 					 <form:label class="control-label" path="backtrace">
-					 	Backtrace:
+				 		Backtrace:
 					 </form:label>
 					 <div class="controls">
-					 	<form:textarea id="backtrace" class="input-xlarge" path="backtrace" rows="8"/>	
+					 	<form:textarea id="backtrace1" class="input-xlarge" path="backtrace" rows="8"/> 
 					 	<form:errors class="alert alert-info" path="backtrace" />
 					 </div>
 				</div> 
@@ -96,22 +85,17 @@
 					<div class="controls"> 
 						<form:input id="process" type="text" class="input-xlarge" path="name" />
 						<form:errors class="alert alert-info" path="name" />
-						<c:if test="${!empty messageDuplicate}">
-						 	<span class="alert alert-info">${messageDuplicate}</span>
-						</c:if> 
 					</div>
 				</div>
 				<div class="form-actions">
-					<button type="submit" value="SAVE" class="btn btn-primary" id="submit" disabled="disabled">SAVE</button>
-					<button type="reset" value="RESET" class="btn" id="reset">CLEAR</button>
+					<button type="submit" value="SAVE" class="btn btn-primary" id="submit">SAVE</button>
 				</div>
 			</fieldset>  
 		</form:form>
 		<script>
 			$('#problem').tooltip({'trigger':'hover', 'title': 'Please, select the problem name that the corresponding backtrace belongs to!'});
-			$('#backtrace').tooltip({'trigger':'hover', 'title': 'Please, input the corresponding backtrace!'}); 
+			$('#backtrace1').tooltip({'trigger':'hover', 'title': 'Please, input the corresponding backtrace!'}); 
 			$('#process').tooltip({'trigger':'hover', 'title': 'Please, add the process name which produced the corresponding coredump!'}); 
-			$('#reset').tooltip({'trigger':'hover', 'title': 'To reset all the input fields press CLEAR button!'}); 
 		</script>
 	</body>
 </html>

@@ -15,20 +15,6 @@
 		<link href="<c:url value="/resources/jQuery/css/jquery-ui-1.8.17.custom.css"/>" rel="stylesheet" type="text/css" />
 		<script src="<c:url value="/resources/jQuery/js/jquery-ui-1.8.17.custom.min.js"/>"></script>		
 		<script src="<c:url value="/resources/bootstrap/js/bootstrap.js"/>"></script>
-		<style>
-			.datepicker{z-index:1151;}
-		</style>
-		<script type="text/javascript">
-		    $(function () {
-		        $('#date, #version').bind('change keyup', function () {      
-		        	if ($('#date').val() != '' && $('#version').val() != '') {
-				      	$(this).closest('form').find(':submit').removeAttr('disabled');
-		        	} else {
-			      		$(this).closest('form').find(':submit').attr('disabled', 'disabled');      
-			      	}
-			    });
-			});
-		</script>
 	</head>
 	<body>
 		<div class="navbar navbar-fixed-top"> 
@@ -61,62 +47,54 @@
 				</div>
 			</div>
 		</div>
+		<h1>List/Add Comments</h1>
 		<c:if test="${!empty message}">
 			<div class="alert alert-error">
 		 		<div align="center">${message}</div>
 			</div>
 		</c:if> 
-		<form:form id="form" class="form-horizontal" method="post" action="addNewVersion.html" commandName="newVersion">		 
+		<c:if test="${!empty commentList}">
+			<c:forEach items="${commentList}" var="comment">
+				<table id="myTable" class="table table-striped table-bordered table-condensed">
+					<thead>
+						<tr>
+							<th>AUTHOR: ${comment.author} DATE ADDED: ${comment.date}</th>
+						</tr>
+					</thead>
+					<tr>
+						<td>${comment.comment}</td>
+					</tr>
+				</table>   
+			</c:forEach>
+		</c:if>
+		<form:form id="form" class="form-horizontal" method="post" action="addComment.html" commandName="comment">		 
 			<fieldset>
 				<div align="center">
-					<legend>Add a Software Version!</legend>
+					<legend>Add a Comment!</legend>
 				</div>
 				<div class="control-group">
-					<form:label class="control-label" path="dateReleased">
-						Release Date:
-					</form:label>
+					<form:label class="control-label" path="author">Author: </form:label>
 					<div class="controls"> 
-						<div class="input-append date" id="dp" data-date="" data-date-format="yyyy-mm-dd">
-							 <form:input id="date" class="span2" size="16" type="text" value="" readonly="true" path="dateReleased"/>
-							 <span class="add-on"><i class="icon-calendar"></i></span>
-						</div>
-						<form:errors class="alert alert-info" path="dateReleased" />
+						<form:input id="author" type="text" class="input-xlarge" path="author"/>
+						<form:errors class="alert alert-info" path="author" />
 			    	</div>
 			    </div>
 		    	<div class="control-group">   
-				    <form:label class="control-label" path="version">
-				    	Version:
-				    </form:label>
-				    <div class="controls"> 
-				    	<form:input id="version" type="text" class="input-xlarge" path="version" />
-	 					<form:errors class="alert alert-info" path="version" />
-	 					<c:if test="${!empty messageDuplicate}">
-						 	<span class="alert alert-info">${messageDuplicate}</span>
-						</c:if> 
-				    </div>
+				    <form:label class="control-label" path="comment">Comment: </form:label>
+				    <div class="controls">
+					 	<form:textarea id="comment" class="input-xlarge" path="comment" rows="8" cols="16"/> 
+					 	<form:errors class="alert alert-info" path="comment" />
+					 </div>
 				</div>
 				<div class="form-actions">
-					<button type="submit" value="SAVE" class="btn btn-primary" id="submit" disabled="disabled">SAVE</button>
+					<button type="submit" value="SAVE" class="btn btn-primary" id="submit">POST COMMENT</button>
 					<button type="reset" value="RESET" class="btn" id="reset">CLEAR</button>
 				</div>
 		 	</fieldset>
 		</form:form>	     
-		<script src="<c:url value="/resources/bootstrap/datepicker/js/bootstrap-datepicker.js"/> " type="text/javascript" charset="UTF-8"></script>
-		<script type="text/javascript">
-			var nowTemp = new Date();
-			var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
-			
-			$('#dp').datepicker({
-				format: 'yyyy-mm-dd',
-				autoclose: true,
-				onRender: function(date) {	
-			    	return date.valueOf() > now.valueOf() ? 'disabled' : '';
-				}
-			});
-		</script>
 		<script>
-			$('#dp').tooltip({'trigger':'hover', 'title': 'Please, add release date of the software version!'}); 
-			$('#version').tooltip({'trigger':'hover', 'title': 'Please, add the name of the software version!'});
+			$('#author').tooltip({'trigger':'hover', 'title': 'Please, add Your name!'}); 
+			$('#comment').tooltip({'trigger':'hover', 'title': 'Please, add a comment!'});
 			$('#reset').tooltip({'trigger':'hover', 'title': 'To reset all the input fields press CLEAR button!'}); 
 		</script>
 	</body>

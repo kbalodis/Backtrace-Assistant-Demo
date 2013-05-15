@@ -22,14 +22,23 @@ public class Version {
 	private Integer id;  
 	
 	@NotNull
-    @Size(min = 1, max = 150, message = "Please enter the software version name!")
+    @Size(min = 1, max = 150, message = "Please, enter the software version name!")
 	@Column(name="VERSION", nullable = false, unique = true)  
 	private String version; 
 	
 	@NotNull
-	@Size(min = 10, max = 10, message = "Please select the date the software version was released!")
+	@Size(min = 10, max = 10, message = "Please, select the date the software version was released!")
 	@Column(name="DATE_RELEASED", nullable = false)
 	private String dateReleased;
+	
+	@Column(name="DATE_ADDED", nullable = false)
+	private String date;
+	
+	@Column(name="DATE_MODIFIED", nullable = false)
+	private String dateModified;
+	
+	@Column(name="IS_DELETED", nullable = false)
+	private Boolean isDeleted;
 	
 	@OneToMany(mappedBy="versionId")
     private Set <Problem> problems;
@@ -57,4 +66,29 @@ public class Version {
 	public void setDateReleased(String dateReleased) {  
 		this.dateReleased = dateReleased;  
 	}	
+	
+	public String getDate() {
+		return date;
+	}
+	 
+	public void setDate(String date) {
+		this.date = date;
+	}
+	
+	public String getDateModified() {
+		return dateModified;
+	}
+	 
+	public void setDateModified(String dateModified) {
+		this.dateModified = dateModified;
+	}
+	
+	public Boolean getIsDeleted() {
+		return isDeleted;
+	}
+	 
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+	
 }

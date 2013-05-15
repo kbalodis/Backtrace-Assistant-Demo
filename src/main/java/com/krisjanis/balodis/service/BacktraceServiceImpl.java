@@ -10,10 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.krisjanis.balodis.dao.BacktraceDao;
 import com.krisjanis.balodis.model.Backtrace;
+import com.krisjanis.balodis.model.Comment;
 import com.krisjanis.balodis.model.Problem;
 import com.krisjanis.balodis.model.Version;
-  
-   
+    
 @Service  
 public class BacktraceServiceImpl implements BacktraceService {  
   
@@ -36,6 +36,21 @@ public class BacktraceServiceImpl implements BacktraceService {
 	}   
 	
 	@Transactional
+	public Backtrace viewBacktrace (Integer id){
+		return backtraceDao.viewBacktrace(id);
+	}
+	
+	@Transactional	
+	public Backtrace getBacktrace (Integer id) {
+		return backtraceDao.getBacktrace(id);
+	}
+	
+	@Transactional
+	public void updateBacktrace (Backtrace backtrace){
+		backtraceDao.updateBacktrace(backtrace);
+	}
+	
+	@Transactional
 	public void addProblem(Problem problem) {  
 		backtraceDao.addProblem(problem); 
 	}
@@ -46,8 +61,18 @@ public class BacktraceServiceImpl implements BacktraceService {
 	}
    
 	@Transactional
-	public void removeProblem(Integer id) {
-		
+	public void removeProblem(Integer id) {  
+		backtraceDao.removeProblem(id);  
+	}   
+
+	@Transactional	
+	public Problem getProblem (Integer id) {
+		return backtraceDao.getProblem(id);
+	}
+	
+	@Transactional
+	public void updateProblem (Problem problem){
+		backtraceDao.updateProblem(problem);
 	}
 	
 	@Transactional
@@ -73,8 +98,18 @@ public class BacktraceServiceImpl implements BacktraceService {
 	}
    
 	@Transactional
-	public void removeVersion(Integer id) {
-		
+	public void removeVersion(Integer id) {  
+		backtraceDao.removeVersion(id);  
+	}   
+
+	@Transactional	
+	public Version getVersion (Integer id) {
+		return backtraceDao.getVersion(id);
+	}
+	
+	@Transactional
+	public void updateVersion (Version version){
+		backtraceDao.updateVersion(version);
 	}
 	
 	@Transactional
@@ -90,5 +125,15 @@ public class BacktraceServiceImpl implements BacktraceService {
 	@Transactional
 	public Boolean duplicateCheck(String str, Class <?> c, String column) {
 		return backtraceDao.duplicateCheck(str, c, column);
+	}
+	
+	@Transactional
+	public void addComment(Comment comment) {
+		backtraceDao.addComment(comment);
+	}
+	
+	@Transactional
+	public List<Comment> listComments() {
+		return backtraceDao.listComments();
 	}
 }  

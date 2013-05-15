@@ -4,7 +4,7 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-	    <title>Backtrace Assistant Demo v0.2</title>
+	    <title>Backtrace Assistant Demo v0.3</title>
 	    <link href="<c:url value="/resources/reset.css"/>" rel="stylesheet" type="text/css" />
 	    <link href="<c:url value="/resources/bootstrap/css/bootstrap.css"/>" rel="stylesheet" type="text/css" />
 	    <link href="<c:url value="/resources/bootstrap/css/bootstrap-responsive.css"/>" rel="stylesheet" type="text/css" />
@@ -36,24 +36,27 @@
 				<div class="container">
 					<ul class="nav">
 						<li class="">
-							<a class="brand" href="index.html">Home</a>
+							<a class="brand" href="<c:url value="/index.html"/>">Home</a>
 						</li>
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">LIST <b class="caret"></b></a>
 							<ul class="dropdown-menu">
-								<li><a href="listVersions.html">Software VERSIONS</a></li>
-			              		<li><a href="listProblems.html">PROBLEMS</a></li>
-			            		<li><a href="listBacktraces.html">BACKTRACES</a></li>
+								<li><a href="<c:url value="/listVersions.html"/>">Software VERSIONS</a></li>
+			              		<li><a href="<c:url value="/listProblems.html"/>">PROBLEMS</a></li>
+			            		<li><a href="<c:url value="/listBacktraces.html"/>">BACKTRACES</a></li>
 			            	</ul>
 			          	</li>
 			          	<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">ADD <b class="caret"></b></a>
 							<ul class="dropdown-menu">
-								<li><a href="addVersionForm.html">Software VERSION</a></li>
-								<li><a href="addProblemForm.html">PROBLEM</a></li>
-								<li><a href="addBacktraceForm.html">BACKTRACE</a></li>
+								<li><a href="<c:url value="/addVersionForm.html"/>">Software VERSION</a></li>
+								<li><a href="<c:url value="/addProblemForm.html"/>">PROBLEM</a></li>
+								<li><a href="<c:url value="/addBacktraceForm.html"/>">BACKTRACE</a></li>
 			            	</ul>
-			          	</li>	
+			          	</li>
+			          	<li class="">
+							<a href="<c:url value="/listComments.html"/>">COMMENTS</a>
+						</li>	
 					</ul>
 				</div>
 			</div>
@@ -63,16 +66,14 @@
 		 			<div align="center">${message}</div>
 		 		</div>
 		</c:if>
-		<form:form class="form-horizontal" method="post" action="addNewProblem.html" modelAttribute="newProblem">		 
+		<form:form class="form-horizontal" method="post" action="addNewProblem.html" commandName="newProblem">		 
 		    <fieldset>
 				<div align="center">
 					<legend>Add a Problem!</legend>
 				</div>
 				<div class="control-group">
 					<form:label class="control-label" path="versId">
-						<a href="#" rel="tooltip" data-original-title="Please, select the software version that produced the corresponding problem!"> 	
-							Software version:
-						</a>
+						Software version:
 					</form:label>   
 					<div class="controls">
 						<form:select id="version" path="versId">
@@ -86,13 +87,11 @@
 				</div>
 				<div class="control-group">
 			        <form:label class="control-label" path="dateReported">
-			        	<a href="#" rel="tooltip" data-original-title="Please, add the date the problem was reported!"> 
-			        		Date Reported:
-			        	</a>
+			        	Date Reported:
 			        </form:label>
 			        <div class="controls">
 			        	<div class="input-append date" id="dp" data-date="">
-						  	<form:input id="date" class="span2" size="16" type="text" value="" path="dateReported"/>
+						  	<form:input id="date" class="span2" size="16" type="text" value="" path="dateReported" readonly="true"/>
 						 	<span class="add-on"><i class="icon-calendar"></i></span>
 						</div>
 						<form:errors class="alert alert-info" path="dateReported" />
@@ -100,9 +99,7 @@
 		     	</div>
 				<div class="control-group">
 				    <form:label class="control-label" path="problem">
-				    	<a href="#" rel="tooltip" data-original-title="Please, add the name of the problem!"> 
-				    		Problem name:
-				    	</a>
+				    	Problem name:
 				    </form:label>
 				    <div class="controls">
 				    	<form:input id="name" type="text" class="input-xlarge" path="problem"/>
@@ -114,7 +111,7 @@
 				</div>   
 				<div class="form-actions">
 					<button type="submit" value="SAVE" class="btn btn-primary" id="submit" disabled="disabled">SAVE</button>
-					<button type="reset" value="RESET" class="btn">CLEAR</button>
+					<button type="reset" value="RESET" class="btn" id="reset">CLEAR</button>
 				</div>
 			</fieldset>
 		</form:form>	
@@ -131,7 +128,10 @@
 			});
 		</script>
 		<script>
-			$('[rel=tooltip]').tooltip(); 
+			$('#version').tooltip({'trigger':'hover', 'title': 'Please, select the software version that produced the corresponding problem!'});
+			$('#dp').tooltip({'trigger':'hover', 'title': 'Please, add the date the problem was reported!'}); 
+			$('#name').tooltip({'trigger':'hover', 'title': 'Please, add the name of the problem!'}); 
+			$('#reset').tooltip({'trigger':'hover', 'title': 'To reset all the input fields press CLEAR button!'}); 
 		</script>
 	</body>
 </html>

@@ -24,12 +24,12 @@ public class Problem {
 	 private Integer id;  
 	 
 	 @NotNull
-	 @Size(min = 1, max = 150, message = "Please enter the problem name!")
+	 @Size(min = 1, max = 150, message = "Please, enter the problem name!")
 	 @Column(name="PROBLEM", nullable = false, unique = true)  
 	 private String problem; 
 	 
 	 @NotNull
-	 @Size(min = 10, max = 10, message = "Please select the date the problem was reported!")
+	 @Size(min = 10, max = 10, message = "Please, select the date the problem was reported!")
 	 @Column(name="DATE_REPORTED", nullable = false)
 	 private String dateReported;
 	 
@@ -37,10 +37,18 @@ public class Problem {
 	 @JoinColumn(name="VERSION_ID", insertable = false, updatable = false)
 	 private Version versionId;
 	 
-	 @NotNull(message = "Please select a version for the reported problem!")
+	 @NotNull(message = "Please, select a version for the reported problem!")
 	 @Column(name="VERSION_ID", nullable = false)
 	 private Integer versId;
 	 
+	 @Column(name="DATE_ADDED", nullable = false)
+	 private String date;
+	 
+	 @Column(name="DATE_MODIFIED", nullable = false)
+	 private String dateModified;
+	 
+	 @Column(name="IS_DELETED", nullable = false)
+	 private Boolean isDeleted;
 		
 	 @OneToMany(mappedBy="problemId")
 	 private Set <Backtrace> backtraces;
@@ -94,4 +102,28 @@ public class Problem {
 	 public void setVersId(Integer versId) {
 		 this.versId = versId;
 	 } 
+	 
+	 public String getDate() {
+		 return date;
+	 }
+		 
+	 public void setDate(String date) {
+		 this.date = date;
+	 }
+	 
+	 public String getDateModified() {
+		 return dateModified;
+	 }
+		 
+	 public void setDateModified(String dateModified) {
+		 this.dateModified = dateModified;
+	 }
+	 
+	 public Boolean getIsDeleted() {
+		 return isDeleted;
+	 }
+	 
+	 public void setIsDeleted(Boolean isDeleted) {
+		 this.isDeleted = isDeleted;
+	 }
 }

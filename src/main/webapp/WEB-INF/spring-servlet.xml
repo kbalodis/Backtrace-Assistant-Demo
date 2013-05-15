@@ -60,6 +60,7 @@
                 <value>com.krisjanis.balodis.model.Backtrace</value>
                 <value>com.krisjanis.balodis.model.Problem</value>
                 <value>com.krisjanis.balodis.model.Version</value>
+                <value>com.krisjanis.balodis.model.Comment</value>
             </list>
        	</property>
         <property name="hibernateProperties">
