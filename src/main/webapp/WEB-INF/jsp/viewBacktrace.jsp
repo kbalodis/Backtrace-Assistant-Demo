@@ -86,13 +86,17 @@
 					<td>
 						<a class="btn btn-primary" href="<c:url value="/editBacktraceForm/${backtrace.id}.html"/>">EDIT</a>
 						<a class="btn btn-primary" href="<c:url value="/addBacktraceForm.html"/>">ADD NEW</a>
-						<a class="btn btn-primary" href="<c:url value="/deleteBacktrace/${backtrace.id}.html"/>">DELETE</a>
+						<a class="btn btn-primary" href="<c:url value="/deleteBacktrace/${backtrace.id}.html"/>" onClick="return confirmAction()">DELETE</a>
 					</td>
 				</tr>
 			</table>			
 		</c:if>
 		<script>
 			$('[rel=tooltip]').tooltip();
+			function confirmAction(){
+			      var confirmed = confirm("Are you sure? This will remove this entry.");
+			      return confirmed;
+			}
 		</script>
 	</body>
 </html>
