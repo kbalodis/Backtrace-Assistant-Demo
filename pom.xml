@@ -3,10 +3,11 @@
   <groupId>accenture.krisjanis.balodis</groupId>
   <artifactId>test13</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <packaging>war</packaging>
+  <packaging>ejb</packaging>
   <properties>
     <org.springframework.version>3.2.1.RELEASE</org.springframework.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <powermock.version>1.5</powermock.version>
   </properties>
   <repositories>
     <repository>
@@ -113,7 +114,7 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>3.8.1</version>
+      <version>4.8.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -151,7 +152,31 @@
 	   <groupId>org.springframework.webflow</groupId>
 	   <artifactId>spring-faces</artifactId>
 	   <version>2.3.2.RELEASE</version>
-	</dependency>         
+	</dependency>
+	<dependency>
+       <groupId>org.mockito</groupId>
+       <artifactId>mockito-all</artifactId>
+       <version>1.9.5</version>
+       <scope>test</scope>
+    </dependency>
+    <dependency>
+       <groupId>org.springframework</groupId>
+       <artifactId>spring-test</artifactId>
+       <version>${org.springframework.version}</version>
+       <scope>provided</scope>
+    </dependency>
+    <dependency>
+       <groupId>org.powermock</groupId>
+       <artifactId>powermock-module-junit4</artifactId>
+       <version>${powermock.version}</version>
+       <scope>test</scope>
+    </dependency>
+    <dependency>
+       <groupId>org.powermock</groupId>
+       <artifactId>powermock-api-mockito</artifactId>
+       <version>${powermock.version}</version>
+       <scope>test</scope>
+    </dependency>         
   </dependencies>
   <build>
     <plugins>

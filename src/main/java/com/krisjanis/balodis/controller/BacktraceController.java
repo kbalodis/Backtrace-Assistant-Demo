@@ -30,7 +30,7 @@ public class BacktraceController {
  
 	@RequestMapping("/index")
     public String home(Map<String, Object> map) {
-		
+	
 		map.put("versionCount", backtraceService.listVersions().size());
 		map.put("problemCount", backtraceService.listProblems().size());
 		map.put("backtraceCount", backtraceService.listBacktraces().size());
@@ -133,7 +133,6 @@ public class BacktraceController {
     		String error = "OOPS! Error occured!";
     		map.put("problemList", backtraceService.listProblems());
     		map.put("message", error);
-    		//map.put("backtrace", backtraceService.getBacktrace(backtraceId));
     		return "editBacktrace";
     	}
     }
@@ -214,7 +213,7 @@ public class BacktraceController {
             	version.setIsDeleted(false);
             	version.setId(versionId);
     			backtraceService.updateVersion(version);
-        		String success = "SUCCESS! You have added a new software version. Version count: " + backtraceService.listVersions().size();
+        		String success = "SUCCESS! You have updated the software version. Version count: " + backtraceService.listVersions().size();
         		attributes.addFlashAttribute("message", success);
         		return "redirect:/listVersions.html";
     		} else {
@@ -226,7 +225,7 @@ public class BacktraceController {
 	            	version.setIsDeleted(false);
 	            	version.setId(versionId);
 	    			backtraceService.updateVersion(version);
-	        		String success = "SUCCESS! You have added a new software version. Version count: " + backtraceService.listVersions().size();
+	        		String success = "SUCCESS! You have updated the software version. Version count: " + backtraceService.listVersions().size();
 	        		attributes.addFlashAttribute("message", success);
 	        		return "redirect:/listVersions.html";
 	    		} else {
@@ -324,7 +323,7 @@ public class BacktraceController {
             	problem.setIsDeleted(false);
             	problem.setId(problemId);
     			backtraceService.updateProblem(problem);
-        		String success = "SUCCESS! You have added a new software version. Version count: " + backtraceService.listVersions().size();
+        		String success = "SUCCESS! You have updated the problem. Problem count: " + backtraceService.listProblems().size();
         		attributes.addFlashAttribute("message", success);
         		return "redirect:/listProblems.html";
     		} else {
@@ -336,7 +335,7 @@ public class BacktraceController {
 	            	problem.setIsDeleted(false);
 	            	problem.setId(problemId);
 	    			backtraceService.updateProblem(problem);
-	        		String success = "SUCCESS! You have added a new software version. Version count: " + backtraceService.listVersions().size();
+	        		String success = "SUCCESS! You have updated the problem. Problem count: " + backtraceService.listProblems().size();
 	        		attributes.addFlashAttribute("message", success);
 	        		return "redirect:/listProblems.html";
 	    		} else {
@@ -380,6 +379,8 @@ public class BacktraceController {
         	comment.setDate(now);
         	comment.setIsDeleted(false);
         	backtraceService.addComment(comment);
+        	String success = "Thank You for commenting!";
+        	map.put("message", success);
         	map.put("comment", new Comment());
             map.put("commentList", backtraceService.listComments());
             return "comments";
