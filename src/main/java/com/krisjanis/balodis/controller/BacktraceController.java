@@ -380,7 +380,7 @@ public class BacktraceController {
         	comment.setIsDeleted(false);
         	backtraceService.addComment(comment);
         	String success = "Thank You for commenting!";
-        	map.put("message", success);
+        	map.put("success", success);
         	map.put("comment", new Comment());
             map.put("commentList", backtraceService.listComments());
             return "comments";

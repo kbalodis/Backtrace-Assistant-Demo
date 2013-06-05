@@ -53,6 +53,11 @@
 		 		<div align="center">${message}</div>
 			</div>
 		</c:if> 
+		<c:if test="${!empty success}">
+			<div class="alert alert-success">
+		 		<div align="center">${success}</div>
+			</div>
+		</c:if> 
 		<c:if test="${!empty commentList}">
 			<c:forEach items="${commentList}" var="comment">
 				<table id="myTable" class="table table-striped table-bordered table-condensed">

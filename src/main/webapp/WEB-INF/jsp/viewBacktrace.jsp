@@ -54,7 +54,7 @@
 				<tr>
 					<td>Backtrace:</td>
 					<td>
-				    	<textarea rows="25" style="width: 600px;" readonly="true">${backtrace.backtrace}</textarea>		        
+				    	<textarea rows="25" style="width: 900px;" readonly="true">${backtrace.backtrace}</textarea>		        
 					</td>
 				</tr>     
 				<tr>        
@@ -94,7 +94,7 @@
 		<script>
 			$('[rel=tooltip]').tooltip();
 			function confirmAction(){
-			      var confirmed = confirm("Are you sure? This will remove this entry.");
+			      var confirmed = confirm("Are You sure? This will remove this entry.");
 			      return confirmed;
 			}
 		</script>

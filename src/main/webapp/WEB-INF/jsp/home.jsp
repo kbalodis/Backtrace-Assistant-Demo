@@ -51,15 +51,15 @@
 		<h3>Mission Statement:</h3>
 		<p>
 			This application is mainly aimed at assisting its users in finding backtraces given concrete parameters. 
-			Its features include: saving backtraces, problems corresponding backtrace belongs to, and software versions 
-			which produced the coredump in the data base; seeing list of backtraces already saved with options to sort, 
+			Its features include: saving backtraces, problems corresponding backtraces belong to, and software versions 
+			which produced the coredump in the data base; viewing list of backtraces already saved with options to sort, 
 			filter, and search them.
 		</p>
 		<h3>Main Functionality:</h3>
 		<p>It is possible to add and save data as well as list/filter/search the saved data.</p>
 		<p>
-			It is required to add software version before problem (problem cannot be entered without corresponding software version) and
-			it is also required to add problem before adding corresponding backtraces belonging to the problem.
+			It is required to add a software version before a problem (the problem cannot be entered without the corresponding software version) and
+			it is also required to add the problem before adding corresponding backtraces belonging to the problem.
 		</p>		
 		<p>The following table has links to the particular functionality options.</p>
 		<table class="table table-striped table-bordered table-condensed">

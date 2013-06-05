@@ -155,7 +155,7 @@
 				<c:forEach items="${backtraceList}" var="backtrace">
 				    <tr>
 				        <td>
-				        	<textarea rows="15" style="width: 400px;" readonly="true">${backtrace.backtrace}</textarea>
+				        	<textarea rows="15" style="width: 600px;" readonly="true">${backtrace.backtrace}</textarea>
 				        	<p>
 				        		<a href="viewBacktrace/${backtrace.id}.html">view</a> | 
 				        		<a href="editBacktraceForm/${backtrace.id}.html">edit</a> |
@@ -190,7 +190,7 @@
 			$('#myTable').tooltip({'trigger':'hover', 'title': 'To filter/search for more than one word use logic operators: e.g. in case of three words per entry use "one && two && three" or "one AND two AND three"!'});
 			$('#reset').tooltip({'trigger':'hover', 'title': 'Press RESET to clear all filtering/searching!'}); 
 			function confirmAction(){
-			      var confirmed = confirm("Are you sure? This will remove this entry.");
+			      var confirmed = confirm("Are You sure? This will remove this entry.");
 			      return confirmed;
 			}
 		</script>

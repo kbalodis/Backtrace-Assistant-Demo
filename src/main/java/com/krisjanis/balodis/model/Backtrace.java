@@ -26,7 +26,7 @@ public class Backtrace{
 	private String name; 
 	
 	@NotNull
-	@Size(min = 1, max = 2500, message = "Please, enter the backtrace!")
+	@Size(min = 1, message = "Please, enter the backtrace!")
 	@Column(name="BACKTRACE", nullable = false)  
 	private String backtrace; 
 	
